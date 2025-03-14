@@ -19,7 +19,7 @@
 
 #### Переменные:
 
-- **TPROXY-порт:**  
+- **TPROXY-порт (опционально):**  
   `_DOKODEMO_TPROXY_PORT`
 
 - **Адрес сервера VLESS:**  
@@ -76,7 +76,7 @@ sudo systemctl start nftables
 Скачайте и установите последнюю версию Xray из [репозитория xray-core](https://github.com/XTLS/Xray-core/releases):
 
 ```bash
-bash <(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh) install
+bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
 ```
 
 Проверьте установленную версию:

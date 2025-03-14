@@ -19,7 +19,7 @@ The variables are marked with comments in the configuration files:
 
 #### Variables:
 
-- **TPROXY Port:**  
+- **TPROXY Port (optional):**  
   `_DOKODEMO_TPROXY_PORT`
 
 - **VLESS Server Address:**  
@@ -76,7 +76,7 @@ sudo systemctl start nftables
 Download and install the latest Xray binary from the [xray-core repository](https://github.com/XTLS/Xray-core/releases):
 
 ```bash
-bash <(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh) install
+bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
 ```
 
 Verify the installation:

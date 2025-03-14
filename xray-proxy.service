@@ -4,6 +4,8 @@ After=network-online.target
 
 [Service]
 Type=simple
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
 Environment="MARK_PROXY=200" "LOOPBACK_TABLE=proxy_loopback" "SUBNET_4=0.0.0.0/0" "SUBNET_6=::/0"
 ExecStartPre=/bin/mkdir -p /etc/iproute2/rt_tables.d
 ExecStartPre=/bin/sh -c 'echo "$MARK_PROXY $LOOPBACK_TABLE" > /etc/iproute2/rt_tables.d/proxy.conf'
@@ -18,7 +20,7 @@ ExecStopPost=-/sbin/ip rule del fwmark $MARK_PROXY table $LOOPBACK_TABLE
 ExecStopPost=-/sbin/ip -6 rule del fwmark $MARK_PROXY table $LOOPBACK_TABLE
 ExecStopPost=-/sbin/ip route del local $SUBNET_4 dev lo table $LOOPBACK_TABLE
 ExecStopPost=-/sbin/ip -6 route del local $SUBNET_6 dev lo table $LOOPBACK_TABLE
-ExecStopPost=/usr/sbin/nft delete table inet proxy
+ExecStopPost=/usr/sbin/nft -f -c delete table inet proxy
 ExecStopPost=/bin/rm -f /etc/iproute2/rt_tables.d/proxy.conf
 
 Restart=on-failure
