@@ -134,7 +134,7 @@
           "serverName": "",
           // _REALITY_PUBLIC_KEY
           "publicKey": "",
-          // _REALITY_SHORT_KEY
+          // _REALITY_SHORT_ID
           "shortId": ""
         },
         "sockopt": {
