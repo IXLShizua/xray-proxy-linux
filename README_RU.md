@@ -46,6 +46,8 @@
 
 Перед установкой убедитесь, что установлены следующие пакеты:
 
+Для **Ubuntu/Debian**:
+
 ```bash
 sudo apt update && sudo apt install -y nftables iproute2
 ```
@@ -65,8 +67,7 @@ sudo pacman -S nftables iproute2
 Убедитесь, что служба `nftables` включена и запущена:
 
 ```bash
-sudo systemctl enable nftables
-sudo systemctl start nftables
+sudo systemctl enable --now nftables
 ```
 
 ---
@@ -149,4 +150,3 @@ systemctl status xray-proxy
 ## Поддержка и участие
 
 Если у вас есть вопросы или предложения по улучшению проекта, откройте issue или отправьте pull request.
-

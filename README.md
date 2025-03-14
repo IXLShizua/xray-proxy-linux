@@ -46,6 +46,8 @@ The variables are marked with comments in the configuration files:
 
 Before proceeding with the installation, ensure that the following packages are installed:
 
+For **Ubuntu/Debian**:
+
 ```bash
 sudo apt update && sudo apt install -y nftables iproute2
 ```
