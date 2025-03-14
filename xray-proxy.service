@@ -1,0 +1,28 @@
+[Unit]
+Description=Xray Proxy
+After=network-online.target
+
+[Service]
+Type=simple
+Environment="MARK_PROXY=200" "LOOPBACK_TABLE=proxy_loopback" "SUBNET_4=0.0.0.0/0" "SUBNET_6=::/0"
+ExecStartPre=/bin/mkdir -p /etc/iproute2/rt_tables.d
+ExecStartPre=/bin/sh -c 'echo "$MARK_PROXY $LOOPBACK_TABLE" > /etc/iproute2/rt_tables.d/proxy.conf'
+ExecStart=/usr/local/bin/xray run --config /etc/xray/config.json
+ExecStartPost=-/sbin/ip rule add fwmark $MARK_PROXY table $LOOPBACK_TABLE
+ExecStartPost=-/sbin/ip -6 rule add fwmark $MARK_PROXY table $LOOPBACK_TABLE
+ExecStartPost=-/sbin/ip route add local $SUBNET_4 dev lo table $LOOPBACK_TABLE
+ExecStartPost=-/sbin/ip -6 route add local $SUBNET_6 dev lo table $LOOPBACK_TABLE
+ExecStartPost=-/usr/sbin/nft -f /etc/nftables/proxy.conf
+
+ExecStopPost=-/sbin/ip rule del fwmark $MARK_PROXY table $LOOPBACK_TABLE
+ExecStopPost=-/sbin/ip -6 rule del fwmark $MARK_PROXY table $LOOPBACK_TABLE
+ExecStopPost=-/sbin/ip route del local $SUBNET_4 dev lo table $LOOPBACK_TABLE
+ExecStopPost=-/sbin/ip -6 route del local $SUBNET_6 dev lo table $LOOPBACK_TABLE
+ExecStopPost=/usr/sbin/nft delete table inet proxy
+ExecStopPost=/bin/rm -f /etc/iproute2/rt_tables.d/proxy.conf
+
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

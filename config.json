@@ -1,0 +1,170 @@
+{
+  "log": {
+    "logLevel": "info"
+  },
+  "dns": {
+    "hosts": {
+      "dns.google": "8.8.8.8"
+    },
+    "servers": [
+      "https://1.1.1.1/dns-query",
+      "https://dns.google/dns-query",
+      "223.5.5.5",
+      "localhost"
+    ]
+  },
+  "routing": {
+    "domainMatcher": "hybrid",
+    "domainStrategy": "AsIs",
+    "rules": [
+      {
+        "type": "field",
+        "ip": [
+          "223.5.5.5"
+        ],
+        "outboundTag": "direct-outbound"
+      },
+      {
+        "type": "field",
+        "ip": [
+          "1.1.1.1",
+          "8.8.8.8"
+        ],
+        "outboundTag": "vless-outbound"
+      },
+      {
+        "type": "field",
+        "ip": [
+          "100.64.0.0/10"
+        ],
+        "outboundTag": "direct-outbound"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "domain:ru"
+        ],
+        "outboundTag": "direct-outbound"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "domain:su"
+        ],
+        "outboundTag": "direct-outbound"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "geosite:category-gov-ru"
+        ],
+        "outboundTag": "direct-outbound"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "geoip:ru"
+        ],
+        "outboundTag": "direct-outbound"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "domain:linuxquestions.org"
+        ],
+        "outboundTag": "direct-outbound"
+      }
+    ]
+  },
+  "inbounds": [
+    {
+      "tag": "tproxy-inbound",
+      // _DOKODEMO_TPROXY_PORT
+      "port": 18889,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "network": "tcp,udp",
+        "followRedirect": true
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": [
+          "http",
+          "tls",
+          "quic"
+        ]
+      },
+      "streamSettings": {
+        "sockopt": {
+          "tproxy": "tproxy",
+          "tcpFastOpen": true,
+          "tcpcongestion": "bbr"
+        }
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "tag": "vless-outbound",
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            // _VLESS_ADDRESS
+            "address": "127.0.0.1",
+            // _VLESS_PORT
+            "port": 0,
+            "users": [
+              {
+                // _VLESS_USER_ID
+                "id": "00000000-0000-0000-0000-000000000000",
+                "flow": "xtls-rprx-vision",
+                "encryption": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "raw",
+        "security": "reality",
+        "realitySettings": {
+          "fingerprint": "chrome",
+          // _REALITY_SERVER_NAME
+          "serverName": "",
+          // _REALITY_PUBLIC_KEY
+          "publicKey": "",
+          // _REALITY_SHORT_KEY
+          "shortId": ""
+        },
+        "sockopt": {
+          "mark": 201
+        }
+      },
+      "mux": {
+        "enabled": true,
+        "concurrency": -1,
+        "xudpConcurrency": -1,
+        "xudpProxyUDP443": "skip"
+      }
+    },
+    {
+      "tag": "direct-outbound",
+      "protocol": "freedom",
+      "streamSettings": {
+        "sockopt": {
+          "mark": 201
+        }
+      }
+    },
+    {
+      "tag": "dns-outbound",
+      "protocol": "dns",
+      "streamSettings": {
+        "sockopt": {
+          "mark": 201
+        }
+      }
+    }
+  ]
+}
