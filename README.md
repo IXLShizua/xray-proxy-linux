@@ -12,6 +12,13 @@ To get started, open this repository in your favorite IDE and enter your values 
 
 ### Required Variables
 
+The variables are marked with comments in the configuration files:
+
+- **JSON files**: Variables are marked using `//` comments.
+- **nftables configuration**: Variables are marked using `#` comments.
+
+#### Variables:
+
 - **TPROXY Port:**  
   `_DOKODEMO_TPROXY_PORT`
 
@@ -55,28 +62,28 @@ For **Arch Linux**:
 sudo pacman -S nftables iproute2
 ```
 
-Make sure that `nftables` service is enabled and running:
+Ensure that the `nftables` service is enabled and running:
 
 ```bash
 sudo systemctl enable nftables
 sudo systemctl start nftables
 ```
 
-### Install Xray-Core
+---
 
-Download and install the latest Xray-Core binary from the official repository:
+## Installing Xray Core
+
+Download and install the latest Xray binary from the [xray-core repository](https://github.com/XTLS/Xray-core/releases):
 
 ```bash
 bash <(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh) install
 ```
 
-Verify that Xray is installed:
+Verify the installation:
 
 ```bash
-xray -version
+xray --version
 ```
-
-Ensure the binary is located at `/usr/local/bin/xray`.
 
 ---
 
@@ -85,7 +92,7 @@ Ensure the binary is located at `/usr/local/bin/xray`.
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-repo/xray-proxy-linux.git
+git clone https://github.com/IXLShizua/xray-proxy-linux.git
 cd xray-proxy-linux
 ```
 
@@ -96,6 +103,7 @@ Open the necessary files in a text editor and update the required variables.
 ### 3. Install Configuration Files
 
 #### 3.1 Xray Configuration
+
 Copy the Xray configuration file to the correct location:
 
 ```bash
@@ -104,6 +112,7 @@ cp config.json /etc/xray/config.json
 ```
 
 #### 3.2 Systemd Service File
+
 Copy the systemd service file and enable it:
 
 ```bash
@@ -113,7 +122,8 @@ systemctl enable xray-proxy
 ```
 
 #### 3.3 Routing and Firewall Rules
-Ensure the routing table and nftables configuration are in place:
+
+Ensure the nftables configuration is in place:
 
 ```bash
 mkdir -p /etc/nftables
@@ -139,3 +149,4 @@ systemctl status xray-proxy
 ## Contributing & Support
 
 For any questions or improvements, feel free to open an issue or submit a pull request.
+
